@@ -478,7 +478,6 @@ bool StartDB()
     WorldDatabase.Execute("UPDATE version SET core_version = '{}', core_revision = '{}'", GitRevision::GetFullVersion(), GitRevision::GetHash());        // One-time query
 
     sWorld->LoadDBVersion();
-    sWorld->LoadDBRevision();
 
     LOG_INFO("server.loading", "> Version DB world:     {}", sWorld->GetDBVersion());
 
@@ -509,7 +508,7 @@ void ClearOnlineAccounts()
 
 void ShutdownCLIThread(std::thread* cliThread)
 {
-    if (cliThread != nullptr)
+    if (cliThread)
     {
 #ifdef _WIN32
         // First try to cancel any I/O in the CLI thread
@@ -760,7 +759,7 @@ void AuctionListingRunnable()
 
 void ShutdownAuctionListingThread(std::thread* thread)
 {
-    if (thread != nullptr)
+    if (thread)
     {
         thread->join();
         delete thread;

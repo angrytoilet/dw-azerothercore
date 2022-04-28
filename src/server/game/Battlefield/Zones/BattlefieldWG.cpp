@@ -225,7 +225,7 @@ void BattlefieldWG::OnBattleStart()
         // Update faction of relic, only attacker can click on
         go->SetUInt32Value(GAMEOBJECT_FACTION, WintergraspFaction[GetAttackerTeam()]);
         // Set in use (not allow to click on before last door is broken)
-        go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
+        go->SetGameObjectFlag(GO_FLAG_NOT_SELECTABLE);
 
         // save guid
         m_titansRelic = go->GetGUID();
@@ -704,29 +704,60 @@ void BattlefieldWG::OnGameObjectCreate(GameObject* go)
 void BattlefieldWG::HandleKill(Player* killer, Unit* victim)
 {
     if (killer == victim)
+    {
         return;
+    }
 
     TeamId killerTeam = killer->GetTeamId();
 
     // xinef: tower cannons also grant rank
     if (victim->GetTypeId() == TYPEID_PLAYER || IsKeepNpc(victim->GetEntry()) || victim->GetEntry() == NPC_WINTERGRASP_TOWER_CANNON)
     {
-        for (GuidUnorderedSet::const_iterator itr = m_PlayersInWar[killerTeam].begin(); itr != m_PlayersInWar[killerTeam].end(); ++itr)
-            if (Player* player = ObjectAccessor::FindPlayer(*itr))
+        if (victim->GetTypeId() == TYPEID_PLAYER && victim->HasAura(SPELL_LIEUTENANT))
+        {
+            // Quest - Wintergrasp - PvP Kill - Horde/Alliance
+            for (auto& playerGuid : m_PlayersInWar[killerTeam])
+            {
+                if (Player* player = ObjectAccessor::FindPlayer(playerGuid))
+                {
+                    if (player->GetDistance2d(killer) < 40)
+                    {
+                        player->KilledMonsterCredit(killerTeam == TEAM_HORDE ? NPC_QUEST_PVP_KILL_ALLIANCE : NPC_QUEST_PVP_KILL_HORDE);
+                    }
+                }
+            }
+        }
+
+        for (auto& playerGuid : m_PlayersInWar[killerTeam])
+        {
+            if (Player* player = ObjectAccessor::FindPlayer(playerGuid))
+            {
                 if (player->GetDistance2d(killer) < 40)
+                {
                     PromotePlayer(player);
+                }
+            }
+        }
 
         // Xinef: Allow to Skin non-released corpse
         if (victim->GetTypeId() == TYPEID_PLAYER)
+        {
             victim->SetUnitFlag(UNIT_FLAG_SKINNABLE);
+        }
     }
     else if (victim->IsVehicle() && !killer->IsFriendlyTo(victim))
     {
         // Quest - Wintergrasp - PvP Kill - Vehicle
-        for (GuidUnorderedSet::const_iterator itr = m_PlayersInWar[killerTeam].begin(); itr != m_PlayersInWar[killerTeam].end(); ++itr)
-            if (Player* player = ObjectAccessor::FindPlayer(*itr))
+        for (auto& playerGuid : m_PlayersInWar[killerTeam])
+        {
+            if (Player* player = ObjectAccessor::FindPlayer(playerGuid))
+            {
                 if (player->GetDistance2d(killer) < 40)
+                {
                     player->KilledMonsterCredit(NPC_QUEST_PVP_KILL_VEHICLE);
+                }
+            }
+        }
     }
 }
 

@@ -1125,6 +1125,11 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
         speedXY = pow(speedZ * 10, 8);
         m_caster->GetMotionMaster()->MoveJump(x, y, z, speedXY, speedZ, 0, ObjectAccessor::GetUnit(*m_caster, m_caster->GetGuidValue(UNIT_FIELD_TARGET)));
 
+        if (Player* player = m_caster->ToPlayer())
+        {
+            player->SetCanTeleport(true);
+        }
+
         if (m_caster->GetTypeId() == TYPEID_PLAYER)
         {
             sScriptMgr->AnticheatSetUnderACKmount(m_caster->ToPlayer());
@@ -1143,6 +1148,10 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
     if (speedXY < 1.0f)
         speedXY = 1.0f;
 
+    if (Player* player = m_caster->ToPlayer())
+    {
+        player->SetCanTeleport(true);
+    }
     m_caster->GetMotionMaster()->MoveJump(x, y, z, speedXY, speedZ);
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER)
@@ -1551,11 +1560,9 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
         }
 
         // Implemented this way as there is no other way to do it currently (that I know :P)...
-        if (caster->ToPlayer() && caster->ToPlayer()->HasAura(23401)) // Nefarian Corrupted Healing (priest)
+        if (caster->ToPlayer() && caster->HasAura(23401)) // Nefarian Corrupted Healing (priest)
         {
-            if (m_spellInfo->Effects[EFFECT_0].ApplyAuraName != SPELL_AURA_PERIODIC_HEAL ||
-                m_spellInfo->Effects[EFFECT_1].ApplyAuraName != SPELL_AURA_PERIODIC_HEAL ||
-                m_spellInfo->Effects[EFFECT_2].ApplyAuraName != SPELL_AURA_PERIODIC_HEAL)
+            if (!m_spellInfo->HasAura(SPELL_AURA_PERIODIC_HEAL) && (m_spellInfo->GetSchoolMask() & SPELL_SCHOOL_MASK_HOLY))
             {
                 m_damage = 0;
                 caster->CastSpell(unitTarget, 23402, false); // Nefarian Corrupted Healing Periodic Damage effect.
@@ -2412,7 +2419,7 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
                             return;
 
                         summon->SelectLevel();       // some summoned creaters have different from 1 DB data for level/hp
-                        summon->SetUInt32Value(UNIT_NPC_FLAGS, summon->GetCreatureTemplate()->npcflag);
+                        summon->ReplaceAllNpcFlags(NPCFlags(summon->GetCreatureTemplate()->npcflag));
 
                         summon->ReplaceAllUnitFlags(UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         summon->SetReactState(REACT_PASSIVE);
@@ -2721,6 +2728,8 @@ void Spell::EffectAddFarsight(SpellEffIndex effIndex)
 
     dynObj->SetDuration(duration);
     dynObj->SetCasterViewpoint();
+
+    m_caster->ToPlayer()->UpdateVisibilityForPlayer();
 }
 
 void Spell::EffectUntrainTalents(SpellEffIndex /*effIndex*/)
@@ -3782,14 +3791,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
             {
                 switch (m_spellInfo->Id)
                 {
-                    // Brittle Armor - need remove one 24575 Brittle Armor aura
-                    case 24590:
-                        unitTarget->RemoveAuraFromStack(24575);
-                        return;
-                    // Mercurial Shield - need remove one 26464 Mercurial Shield aura
-                    case 26465:
-                        unitTarget->RemoveAuraFromStack(26464);
-                        return;
                     // Shadow Flame (All script effects, not just end ones to prevent player from dodging the last triggered spell)
                     case 22539:
                     case 22972:
@@ -3815,32 +3816,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                             // Shadow Flame
                             m_caster->CastSpell(unitTarget, 22682, true);
                             return;
-                        }
-                    // Mirren's Drinking Hat
-                    case 29830:
-                        {
-                            uint32 itemId = 23586;  // Aerie Peak Pale Ale
-                            switch (urand(0, 5))
-                            {
-                                case 0:
-                                case 1:
-                                case 2:
-                                    itemId = 23584;
-                                    break;            // Loch Modan Lager
-                                case 3:
-                                case 4:
-                                    itemId = 23585;
-                                    break;            // Stouthammer Lite
-                            }
-                            DoCreateItem(effIndex, itemId);
-                            break;
-                        }
-                    case 20589: // Escape artist
-                    case 30918: // Improved Sprint
-                        {
-                            // Removes snares and roots.
-                            unitTarget->RemoveMovementImpairingAuras(true);
-                            break;
                         }
                     // Plant Warmaul Ogre Banner
                     case 32307:
@@ -3923,19 +3898,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                             m_caster->TextEmote(buf);
                             break;
                         }
-                    // Deathbolt from Thalgran Blightbringer
-                    // reflected by Freya's Ward
-                    // Retribution by Sevenfold Retribution
-                    case 51854:
-                        {
-                            if (!unitTarget)
-                                return;
-                            if (unitTarget->HasAura(51845))
-                                unitTarget->CastSpell(m_caster, 51856, true);
-                            else
-                                m_caster->CastSpell(unitTarget, 51855, true);
-                            break;
-                        }
                     case 52173: // Coyote Spirit Despawn
                     case 60243: // Blood Parrot Despawn
                         if (unitTarget->GetTypeId() == TYPEID_UNIT && unitTarget->ToCreature()->IsSummon())
@@ -3971,26 +3933,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
 
                             if (unitTarget->ToPlayer()->GetQuestStatus(questID) == QUEST_STATUS_COMPLETE)
                                 unitTarget->CastSpell(unitTarget, spellID, true);
-
-                            return;
-                        }
-                    case 59317:                                 // Teleporting
-                        {
-                            if (!unitTarget)
-                                return;
-
-                            Player* player = unitTarget->ToPlayer();
-                            if (!player)
-                            {
-                                return;
-                            }
-
-                            // return from top
-                            if (player->GetAreaId() == 4637)
-                                unitTarget->CastSpell(unitTarget, 59316, true);
-                            // teleport atop
-                            else
-                                unitTarget->CastSpell(unitTarget, 59314, true);
 
                             return;
                         }
@@ -4271,7 +4213,7 @@ void Spell::EffectStuck(SpellEffIndex /*effIndex*/)
             return;
 
         // xinef: player is in corpse
-        if (!target->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
+        if (!target->HasPlayerFlag(PLAYER_FLAGS_GHOST))
             target->BuildPlayerRepop();
         target->RepopAtGraveyard();
         return;
@@ -4895,7 +4837,7 @@ void Spell::EffectSkinning(SpellEffIndex /*effIndex*/)
     uint32 skill = creature->GetCreatureTemplate()->GetRequiredLootSkill();
 
     creature->RemoveUnitFlag(UNIT_FLAG_SKINNABLE);
-    creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+    creature->SetDynamicFlag(UNIT_DYNFLAG_LOOTABLE);
     m_caster->ToPlayer()->SendLoot(creature->GetGUID(), LOOT_SKINNING);
 
     int32 reqValue = targetLevel < 10 ? 0 : targetLevel < 20 ? (targetLevel - 10) * 10 : targetLevel * 5;
@@ -4928,10 +4870,12 @@ void Spell::EffectCharge(SpellEffIndex /*effIndex*/)
             targetGUID = unitTarget->GetGUID();
         }
 
-        if (m_pathFinder)
+        float speed = G3D::fuzzyGt(m_spellInfo->Speed, 0.0f) ? m_spellInfo->Speed : SPEED_CHARGE;
+        // Spell is not using explicit target - no generated path
+        if (!m_preGeneratedPath)
         {
-            m_caster->GetMotionMaster()->MoveCharge(m_pathFinder->GetEndPosition().x, m_pathFinder->GetEndPosition().y, m_pathFinder->GetEndPosition().z,
-                42.0f, EVENT_CHARGE, &m_pathFinder->GetPath(), false, 0.f, targetGUID);
+            Position pos = unitTarget->GetFirstCollisionPosition(unitTarget->GetCombatReach(), unitTarget->GetRelativeAngle(m_caster));
+            m_caster->GetMotionMaster()->MoveCharge(pos.m_positionX, pos.m_positionY, pos.m_positionZ, speed);
 
             if (m_caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -4940,10 +4884,7 @@ void Spell::EffectCharge(SpellEffIndex /*effIndex*/)
         }
         else
         {
-            Position pos = unitTarget->GetFirstCollisionPosition(unitTarget->GetObjectSize(), unitTarget->GetRelativeAngle(m_caster));
-
-            m_caster->GetMotionMaster()->MoveCharge(pos.m_positionX, pos.m_positionY, pos.m_positionZ + Z_OFFSET_FIND_HEIGHT, SPEED_CHARGE, EVENT_CHARGE,
-                nullptr, false, 0.f, targetGUID);
+            m_caster->GetMotionMaster()->MoveCharge(*m_preGeneratedPath, speed);
 
             if (m_caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -5245,7 +5186,7 @@ void Spell::EffectResurrectPet(SpellEffIndex /*effIndex*/)
     player->GetClosePoint(x, y, z, pet->GetCombatReach(), PET_FOLLOW_DIST, pet->GetFollowAngle());
     pet->NearTeleportTo(x, y, z, player->GetOrientation());
     pet->Relocate(x, y, z, player->GetOrientation()); // This is needed so SaveStayPosition() will get the proper coords.
-    pet->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_NONE);
+    pet->ReplaceAllDynamicFlags(UNIT_DYNFLAG_NONE);
     pet->RemoveUnitFlag(UNIT_FLAG_SKINNABLE);
     pet->setDeathState(ALIVE);
     pet->ClearUnitState(uint32(UNIT_STATE_ALL_STATE & ~(UNIT_STATE_POSSESSED))); // xinef: just in case

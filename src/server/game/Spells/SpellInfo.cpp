@@ -831,6 +831,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry)
     SpellVisual = spellEntry->SpellVisual;
     SpellIconID = spellEntry->SpellIconID;
     ActiveIconID = spellEntry->ActiveIconID;
+    SpellPriority = spellEntry->SpellPriority;
     SpellName = spellEntry->SpellName;
     Rank = spellEntry->Rank;
     MaxTargetLevel = spellEntry->MaxTargetLevel;
@@ -1499,7 +1500,7 @@ SpellCastResult SpellInfo::CheckLocation(uint32 map_id, uint32 zone_id, uint32 a
     }
 
     // continent limitation (virtual continent)
-    if (HasAttribute(SPELL_ATTR4_ONLY_FLYING_AREAS))
+    if (HasAttribute(SPELL_ATTR4_ONLY_FLYING_AREAS) && (area_id || zone_id))
     {
         AreaTableEntry const* areaEntry = sAreaTableStore.LookupEntry(area_id);
         if (!areaEntry)
