@@ -2179,7 +2179,7 @@ public:
             case RACE_ORC:
                 raceStr = "Orc";
                 break;
-            case RACE_DWARF:
+            case RACE_DARKIRON_DWARF:
                 raceStr = "Dwarf";
                 break;
             case RACE_NIGHTELF:
@@ -2194,13 +2194,13 @@ public:
             case RACE_GNOME:
                 raceStr = "Gnome";
                 break;
-            case RACE_TROLL:
+            case RACE_ZANDALARI_TROLL:
                 raceStr = "Troll";
                 break;
             case RACE_BLOODELF:
                 raceStr = "Blood Elf";
                 break;
-            case RACE_DRAENEI:
+            case RACE_LIGHTFORGED_DRAENEI:
                 raceStr = "Draenei";
                 break;
         }

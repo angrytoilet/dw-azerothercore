@@ -66,43 +66,53 @@ enum Gender
 // EnumUtils: DESCRIBE THIS
 enum Races
 {
-    RACE_NONE               = 0,  // SKIP
-    RACE_HUMAN              = 1,  // TITLE Human
-    RACE_ORC                = 2,  // TITLE Orc
-    RACE_DWARF              = 3,  // TITLE Dwarf
-    RACE_NIGHTELF           = 4,  // TITLE Night Elf
-    RACE_UNDEAD_PLAYER      = 5,  // TITLE Undead
-    RACE_TAUREN             = 6,  // TITLE Tauren
-    RACE_GNOME              = 7,  // TITLE Gnome
-    RACE_TROLL              = 8,  // TITLE Troll
-    //RACE_GOBLIN             = 9,
-    RACE_BLOODELF           = 10, // TITLE Blood Elf
-    RACE_DRAENEI            = 11 //, TITLE Draenei
-    //RACE_FEL_ORC        = 12,
-    //RACE_NAGA           = 13,
-    //RACE_BROKEN         = 14,
-    //RACE_SKELETON       = 15,
-    //RACE_VRYKUL         = 16,
-    //RACE_TUSKARR        = 17,
-    //RACE_FOREST_TROLL   = 18,
-    //RACE_TAUNKA         = 19,
-    //RACE_NORTHREND_SKELETON = 20,
-    //RACE_ICE_TROLL      = 21
+    RACE_NONE                 = 0,  // SKIP
+    RACE_HUMAN                = 1,  // TITLE Human
+    RACE_ORC                  = 2,  // TITLE Orc
+    RACE_DARKIRON_DWARF       = 3,  // TITLE Dwarf
+    RACE_NIGHTELF             = 4,  // TITLE Night Elf
+    RACE_UNDEAD_PLAYER        = 5,  // TITLE Undead
+    RACE_TAUREN               = 6,  // TITLE Tauren
+    RACE_GNOME                = 7,  // TITLE Gnome
+    RACE_ZANDALARI_TROLL      = 8,  // TITLE Troll
+    RACE_WORGEN_H             = 9,  // TITLE Worgen
+    RACE_BLOODELF             = 10, // TITLE Blood Elf
+    RACE_LIGHTFORGED_DRAENEI  = 11, // TITLE Draenei
+    RACE_WORGEN_A             = 12, // TITLE Worgen
+    RACE_VULPERA_A            = 13, // TITLE Vulpera
+    RACE_VULPERA_H            = 14, // TITLE Vulpera 
+    RACE_SABERON_A            = 15, // TITLE Saberon
+    RACE_SABERON_H            = 16, // TITLE Saberon  
+    RACE_STEWARD              = 17  // TITLE Steward
+    //RACE_GOBLIN             = 28, // TITLE Goblin   
+    //RACE_NAGA               = 29,
+    //RACE_BROKEN             = 30,
+    //RACE_SKELETON           = 31,
+    //RACE_VRYKUL             = 32,
+    //RACE_TUSKARR            = 33,
+    //RACE_FOREST_TROLL       = 34,
+    //RACE_TAUNKA             = 35,
+    //RACE_NORTHREND_SKELETON = 36,
+    //RACE_ICE_TROLL          = 37,
 };
 
 // max+1 for player race
-#define MAX_RACES         12
+#define MAX_RACES         18
 
 #define RACEMASK_ALL_PLAYABLE \
-    ((1<<(RACE_HUMAN-1))   |(1<<(RACE_ORC-1))          |(1<<(RACE_DWARF-1))   | \
-    (1<<(RACE_NIGHTELF-1))|(1<<(RACE_UNDEAD_PLAYER-1))|(1<<(RACE_TAUREN-1))  | \
-    (1<<(RACE_GNOME-1))   |(1<<(RACE_TROLL-1))        |(1<<(RACE_BLOODELF-1))| \
-    (1<<(RACE_DRAENEI-1)))
+    ((1 << (RACE_HUMAN - 1))          | (1 << (RACE_ORC - 1))             | (1 << (RACE_DARKIRON_DWARF - 1))      | \
+    (1 << (RACE_NIGHTELF - 1))        | (1 << (RACE_UNDEAD_PLAYER - 1))   | (1 << (RACE_TAUREN - 1))              | \
+    (1 << (RACE_GNOME - 1))           | (1 << (RACE_VULPERA_H - 1))       | (1 << (RACE_LIGHTFORGED_DRAENEI - 1)) | \
+    (1 << (RACE_BLOODELF - 1))        | (1 << (RACE_WORGEN_H - 1))        | (1 << (RACE_ZANDALARI_TROLL - 1))     | \
+    (1 << (RACE_VULPERA_A - 1))       | (1 << (RACE_WORGEN_A - 1))        | (1 << (RACE_SABERON_A - 1))           | \
+	(1 << (RACE_SABERON_H - 1))       | (1 << (RACE_STEWARD - 1)))
 
 #define RACEMASK_ALLIANCE \
-    ((1<<(RACE_HUMAN-1)) | (1<<(RACE_DWARF-1)) | (1<<(RACE_NIGHTELF-1)) | \
-    (1<<(RACE_GNOME-1)) | (1<<(RACE_DRAENEI-1)))
-
+    ((1 << (RACE_HUMAN - 1))    | (1 << (RACE_DARKIRON_DWARF - 1))  | (1 << (RACE_NIGHTELF - 1))            | \
+    (1 << (RACE_GNOME - 1))     | (1 << (RACE_VULPERA_A - 1))       | (1 << (RACE_LIGHTFORGED_DRAENEI - 1)) | \
+    (1 << (RACE_WORGEN_A - 1))  | (1 << (RACE_SABERON_A - 1))                                               | \
+	(1 << (RACE_STEWARD - 1)))
+	
 #define RACEMASK_HORDE RACEMASK_ALL_PLAYABLE & ~RACEMASK_ALLIANCE
 
 // Class value is index in ChrClasses.dbc
@@ -119,7 +129,7 @@ enum Classes
     CLASS_SHAMAN        = 7, // TITLE Shaman
     CLASS_MAGE          = 8, // TITLE Mage
     CLASS_WARLOCK       = 9, // TITLE Warlock
-    //CLASS_UNK           = 10,
+    //CLASS_UNK         = 10,
     CLASS_DRUID         = 11 // TITLE Druid
 };
 

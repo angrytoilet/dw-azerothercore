@@ -47,7 +47,7 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
         case RACE_ORC:
             SetTaximaskNode(23);
             break;     // Orc
-        case RACE_DWARF:
+        case RACE_DARKIRON_DWARF:
             SetTaximaskNode(6);
             break;     // Dwarf
         case RACE_NIGHTELF:
@@ -63,13 +63,13 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
         case RACE_GNOME:
             SetTaximaskNode(6);
             break;     // Gnome
-        case RACE_TROLL:
+        case RACE_ZANDALARI_TROLL:
             SetTaximaskNode(23);
             break;     // Troll
         case RACE_BLOODELF:
             SetTaximaskNode(82);
             break;     // Blood Elf
-        case RACE_DRAENEI:
+        case RACE_LIGHTFORGED_DRAENEI:
             SetTaximaskNode(94);
             break;     // Draenei
     }

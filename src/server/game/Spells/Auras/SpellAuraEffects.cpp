@@ -2155,7 +2155,7 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 10139 : 10140);
                                     break;
                                 // Troll
-                                case RACE_TROLL:
+                                case RACE_ZANDALARI_TROLL:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 10135 : 10134);
                                     break;
                                 // Tauren
@@ -2167,11 +2167,11 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 10146 : 10145);
                                     break;
                                 // Draenei
-                                case RACE_DRAENEI:
+                                case RACE_LIGHTFORGED_DRAENEI:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 17827 : 17828);
                                     break;
                                 // Dwarf
-                                case RACE_DWARF:
+                                case RACE_DARKIRON_DWARF:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 10141 : 10142);
                                     break;
                                 // Gnome
@@ -2214,7 +2214,7 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 25039 : 25050);
                                     break;
                                 // Troll
-                                case RACE_TROLL:
+                                case RACE_ZANDALARI_TROLL:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 25041 : 25052);
                                     break;
                                 // Tauren
@@ -2226,11 +2226,11 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 25042 : 25053);
                                     break;
                                 // Draenei
-                                case RACE_DRAENEI:
+                                case RACE_LIGHTFORGED_DRAENEI:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 25033 : 25044);
                                     break;
                                 // Dwarf
-                                case RACE_DWARF:
+                                case RACE_DARKIRON_DWARF:
                                     target->SetDisplayId(target->getGender() == GENDER_MALE ? 25034 : 25045);
                                     break;
                                 // Gnome

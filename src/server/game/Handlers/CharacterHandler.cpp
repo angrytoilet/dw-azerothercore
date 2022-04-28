@@ -2144,10 +2144,10 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
 
             switch (factionChangeInfo->Race)
             {
-            case RACE_DWARF:
+            case RACE_DARKIRON_DWARF:
                 stmt->SetData(1, 111);
                 break;
-            case RACE_DRAENEI:
+            case RACE_LIGHTFORGED_DRAENEI:
                 stmt->SetData(1, 759);
                 break;
             case RACE_GNOME:
@@ -2162,7 +2162,7 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
             case RACE_TAUREN:
                 stmt->SetData(1, 115);
                 break;
-            case RACE_TROLL:
+            case RACE_ZANDALARI_TROLL:
                 stmt->SetData(1, 315);
                 break;
             case RACE_BLOODELF:

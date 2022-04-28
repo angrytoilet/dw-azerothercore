@@ -18634,6 +18634,9 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form) const
         {
             case FORM_CAT:
                 // Based on Hair color
+					if (HasAura(2000130))
+				return 31727;
+			
                 if (getRace() == RACE_NIGHTELF)
                 {
                     uint8 hairColor = GetByteValue(PLAYER_BYTES, 3);
@@ -18845,7 +18848,7 @@ uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
                 }
                 break;
             }
-        case RACE_DWARF:
+        case RACE_DARKIRON_DWARF:
             {
                 switch (totemType)
                 {
@@ -18860,7 +18863,7 @@ uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
                 }
                 break;
             }
-        case RACE_TROLL:
+        case RACE_ZANDALARI_TROLL:
             {
                 switch (totemType)
                 {
@@ -18890,7 +18893,7 @@ uint32 Unit::GetModelForTotem(PlayerTotemType totemType)
                 }
                 break;
             }
-        case RACE_DRAENEI:
+        case RACE_LIGHTFORGED_DRAENEI:
             {
                 switch (totemType)
                 {

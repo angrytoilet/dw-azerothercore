@@ -33,14 +33,14 @@ AC_API_EXPORT EnumText EnumUtils<Races>::ToString(Races value)
     {
         case RACE_HUMAN: return { "RACE_HUMAN", "Human", "" };
         case RACE_ORC: return { "RACE_ORC", "Orc", "" };
-        case RACE_DWARF: return { "RACE_DWARF", "Dwarf", "" };
+        case RACE_DARKIRON_DWARF: return { "RACE_DARK_IRON_DWARF", "Dark iron Dwarf", "" };
         case RACE_NIGHTELF: return { "RACE_NIGHTELF", "Night Elf", "" };
         case RACE_UNDEAD_PLAYER: return { "RACE_UNDEAD_PLAYER", "Undead", "" };
         case RACE_TAUREN: return { "RACE_TAUREN", "Tauren", "" };
         case RACE_GNOME: return { "RACE_GNOME", "Gnome", "" };
-        case RACE_TROLL: return { "RACE_TROLL", "Troll", "" };
+        case RACE_ZANDALARI_TROLL: return { "RACE_ZANDALARI_TROLL", "Zandalari Troll", "" };
         case RACE_BLOODELF: return { "RACE_BLOODELF", "Blood Elf", "" };
-        case RACE_DRAENEI: return { "RACE_DRAENEI", "Draenei", "" };
+        case RACE_LIGHTFORGED_DRAENEI: return { "RACE_LIGHTFOGED_DRAENEI", "Lightforged Draenei", "" };
         default: throw std::out_of_range("value");
     }
 }
@@ -55,14 +55,14 @@ AC_API_EXPORT Races EnumUtils<Races>::FromIndex(size_t index)
     {
         case 0: return RACE_HUMAN;
         case 1: return RACE_ORC;
-        case 2: return RACE_DWARF;
+        case 2: return RACE_DARKIRON_DWARF;
         case 3: return RACE_NIGHTELF;
         case 4: return RACE_UNDEAD_PLAYER;
         case 5: return RACE_TAUREN;
         case 6: return RACE_GNOME;
-        case 7: return RACE_TROLL;
+        case 7: return RACE_ZANDALARI_TROLL;
         case 8: return RACE_BLOODELF;
-        case 9: return RACE_DRAENEI;
+        case 9: return RACE_LIGHTFORGED_DRAENEI;
         default: throw std::out_of_range("index");
     }
 }
@@ -74,14 +74,14 @@ AC_API_EXPORT size_t EnumUtils<Races>::ToIndex(Races value)
     {
         case RACE_HUMAN: return 0;
         case RACE_ORC: return 1;
-        case RACE_DWARF: return 2;
+        case RACE_DARKIRON_DWARF: return 2;
         case RACE_NIGHTELF: return 3;
         case RACE_UNDEAD_PLAYER: return 4;
         case RACE_TAUREN: return 5;
         case RACE_GNOME: return 6;
-        case RACE_TROLL: return 7;
+        case RACE_ZANDALARI_TROLL: return 7;
         case RACE_BLOODELF: return 8;
-        case RACE_DRAENEI: return 9;
+        case RACE_LIGHTFORGED_DRAENEI: return 9;
         default: throw std::out_of_range("value");
     }
 }

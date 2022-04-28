@@ -838,7 +838,7 @@ public:
                                     return;
                             }
                             break;
-                        case RACE_DWARF:
+                        case RACE_DARKIRON_DWARF:
                             switch (ExecuteSpeech_Counter)
                             {
                                 case 0:
@@ -1068,7 +1068,7 @@ public:
                                     return;
                             }
                             break;
-                        case RACE_TROLL:
+                        case RACE_ZANDALARI_TROLL:
                             switch (ExecuteSpeech_Counter)
                             {
                                 case 0:
@@ -1158,7 +1158,7 @@ public:
                                     return;
                             }
                             break;
-                        case RACE_DRAENEI:
+                        case RACE_LIGHTFORGED_DRAENEI:
                             switch (ExecuteSpeech_Counter)
                             {
                                 case 0:

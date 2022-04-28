@@ -226,7 +226,7 @@ public:
                                     Reset();
                                     return;
                                 }
-                                const char* name_races[RACE_DRAENEI] = {"human", "orc", "dwarf", "nightelf", "undead", "tauren", "gnome", "troll", "", "bloodelf", "draenei"};
+                                const char* name_races[RACE_LIGHTFORGED_DRAENEI] = {"human", "orc", "dwarf", "nightelf", "undead", "tauren", "gnome", "troll", "", "bloodelf", "draenei"};
                                 if( p->getRace() > 11 )
                                 {
                                     Reset();
